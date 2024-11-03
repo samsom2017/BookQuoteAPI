@@ -3,6 +3,7 @@ using BookQuoteAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace BookQuoteAPI.Controllers
 {
@@ -26,21 +27,28 @@ namespace BookQuoteAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
-            return await _context.Books.ToListAsync();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var books = await _context.Books
+                .Where(x => x.UserId == new Guid(userId))
+                .ToListAsync();
+            return books;
         }
 
         // GET: api/Books/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBook(int id)
         {
-            var book = await _context.Books.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var book = await _context.Books
+                .Where(x => x.UserId == new Guid(userId))
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (book == null)
             {
                 return NotFound("Book is not found ");
             }
 
-            return book;
+            return Ok(book);
         }
 
         // PUT: api/Books/5
@@ -48,38 +56,69 @@ namespace BookQuoteAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBook(int id, Book book)
         {
-            if (id != book.Id)
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var existingBook = await _context.Books
+                .Where(x => x.UserId == new Guid(userId))
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if(existingBook == null)
             {
-                return BadRequest();
+                return NotFound("Book is not found ");
             }
 
-            _context.Entry(book).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BookExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            existingBook.Author = book.Author;
+            existingBook.Title = book.Title;
+            existingBook.PublishedDate = book.PublishedDate;
+
+            await _context.SaveChangesAsync();
 
             return NoContent();
-        }
+            //    if (id != book.Id)
+            //    {
+            //        return BadRequest();
+            //    }
 
-        // POST: api/Books
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+            //    _context.Entry(book).State = EntityState.Modified;
+
+            //    try
+            //    {
+            //        await _context.SaveChangesAsync();
+            //    }
+            //    catch (DbUpdateConcurrencyException)
+            //    {
+            //        if (!BookExists(id))
+            //        {
+            //            return NotFound();
+            //        }
+            //        else
+            //        {
+            //            throw;
+            //        }
+            //    }
+
+            //    return NoContent();
+            }
+
+
+
+            // POST: api/Books
+            // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+            [HttpPost]
         public async Task<ActionResult<List<Book>>> PostBook(Book book)
         {
-            _context.Books.Add(book);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var newBook = new Book
+            {
+                UserId = new Guid(userId),
+                Id = book.Id,
+                Title = book.Title,
+                PublishedDate = book.PublishedDate,
+                Author = book.Author,
+            };
+            _context.Books.Add(newBook);
+
             await _context.SaveChangesAsync();
 
             return Ok(await _context.Books.ToListAsync());
@@ -89,21 +128,25 @@ namespace BookQuoteAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(int id)
         {
-            var book = await _context.Books.FindAsync(id);
-            if (book == null)
-            {
-                return NotFound();
-            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var existingBook = await _context.Books
+                            .Where(x => x.UserId == new Guid(userId))
+                            .FirstOrDefaultAsync(x => x.Id == id);
 
-            _context.Books.Remove(book);
+            if (existingBook == null)
+            {
+                return NotFound("Book is not found ");
+            }
+            
+            _context.Books.Remove(existingBook);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool BookExists(int id)
-        {
-            return _context.Books.Any(e => e.Id == id);
-        }
+        //private bool BookExists(int id)
+        //{
+        //    return _context.Books.Any(e => e.Id == id);
+        //}
     }
 }
