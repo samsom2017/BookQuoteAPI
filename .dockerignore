@@ -7,10 +7,10 @@
 **/*.*proj.user
 
 # Ignore local environment files and Docker-related files (unless you need Docker for deployment)
-.env
-docker-compose
-Dockerfile  # Uncomment this line if Render is using Dockerfile; otherwise, remove it to include Dockerfile
-.dockerignore
+**/.env
+**/docker-compose*
+**/Dockerfile*  # Uncomment this line if Render is using Dockerfile; otherwise, remove it to include Dockerfile
+**/.dockerignore
 
 # Ignore build artifacts
 **/bin
@@ -27,13 +27,13 @@ Dockerfile  # Uncomment this line if Render is using Dockerfile; otherwise, remo
 **/values.dev.yaml
 
 # Git files
-.git
-.gitignore
+**/.git
+**/.gitignore
 !**/.gitignore  # Ensure the main .gitignore file itself is included
 !.git/HEAD
 !.git/config
 !.git/packed-refs
-!.git/refs/heads/
+!.git/refs/heads/*
 
 # Licenses and documentation
 LICENSE
