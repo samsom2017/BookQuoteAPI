@@ -24,9 +24,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", builder =>
     {
-        builder.WithOrigins("https://bookquoteapp.onrender.com") // Updated to include Render domain
+        builder.WithOrigins("https://bookquoteapp.onrender.com", "http://localhost:4200") // Updated to include Render domain
                .AllowAnyHeader()
-               .AllowAnyMethod();
+               .AllowAnyMethod()
+               .AllowCredentials();
     });
 });
 
