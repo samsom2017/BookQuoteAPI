@@ -103,16 +103,41 @@ namespace BookQuoteAPI.Controllers
 
 
 
-            // POST: api/Books
-            // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-            [HttpPost]
-        public async Task<ActionResult<List<Book>>> PostBook(Book book)
+        // POST: api/Books
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /* 
+      [HttpPost]
+      public async Task<ActionResult<List<Book>>> PostBook(Book book)
+      {
+          var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+          var newBook = new Book
+          {
+              UserId = new Guid(userId),
+              Id = book.Id,
+              Title = book.Title,
+              PublishedDate = book.PublishedDate,
+              Author = book.Author,
+          };
+          _context.Books.Add(newBook);
+
+          await _context.SaveChangesAsync();
+
+          return Ok(await _context.Books.ToListAsync());
+      }
+        */
+
+        [HttpPost]
+        public async Task<ActionResult<Book>> PostBook(Book book)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var parsedUserId))
+            {
+                return Unauthorized("Invalid user ID");
+            }
+
             var newBook = new Book
             {
-                UserId = new Guid(userId),
-                Id = book.Id,
+                UserId = parsedUserId,
                 Title = book.Title,
                 PublishedDate = book.PublishedDate,
                 Author = book.Author,
@@ -121,8 +146,9 @@ namespace BookQuoteAPI.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.Books.ToListAsync());
+            return CreatedAtAction(nameof(GetBook), new { id = newBook.Id }, newBook);
         }
+
 
         // DELETE: api/Books/5
         [HttpDelete("{id}")]
