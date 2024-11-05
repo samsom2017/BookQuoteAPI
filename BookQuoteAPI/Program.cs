@@ -33,7 +33,9 @@ builder.Services.AddCors(options =>
 
 // Add services to the container
 builder.Services.AddControllers();
+var app = builder.Build();
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo()
@@ -67,12 +69,15 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var app = builder.Build();
+
 app.MapGet("/", () => Results.Redirect("/swagger"));
 // Apply CORS policy after app is built
 app.UseCors("AllowAngularApp");
 
-
+/*
+ builder.Services.AddControllers();
+var app = builder.Build();
+ */
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
