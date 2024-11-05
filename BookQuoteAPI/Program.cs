@@ -22,9 +22,9 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
 // Add CORS policy here, before builder.Build()
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp", builder =>
+    options.AddPolicy("AllowAllOrigins", builder =>
     {
-        builder.WithOrigins("https://bookquoteapp.onrender.com", "http://localhost:4200") // Updated to include Render domain
+        builder.WithOrigins("https://bookquoteapp.onrender.com") // Updated to include Render domain
                .AllowAnyHeader()
                .AllowAnyMethod()
                .AllowCredentials();
@@ -70,7 +70,7 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 app.MapGet("/", () => Results.Redirect("/swagger"));
 // Apply CORS policy after app is built
-app.UseCors("AllowAngularApp");
+app.UseCors("AllowAllOrigins");
 
 /*
  builder.Services.AddControllers();
