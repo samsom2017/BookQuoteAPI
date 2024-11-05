@@ -67,16 +67,16 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
-
+app.MapGet("/", () => Results.Redirect("/swagger"));
 // Apply CORS policy after app is built
 app.UseCors("AllowAngularApp");
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
-{
+
+
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
