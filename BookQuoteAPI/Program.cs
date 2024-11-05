@@ -34,7 +34,7 @@ builder.Services.AddCors(options =>
 // Add services to the container
 builder.Services.AddControllers();
 var app = builder.Build();
-builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
