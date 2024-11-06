@@ -1,6 +1,7 @@
 ﻿using BookQuoteAPI.Data;
 using BookQuoteAPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -11,6 +12,7 @@ namespace BookQuoteAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
+    [EnableCors("AllowAllOrigins")]
     public class BooksController : ControllerBase
     { 
         //inject DB
