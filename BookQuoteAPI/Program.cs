@@ -69,19 +69,14 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 app.MapGet("/", () => Results.Redirect("/swagger"));
-// Apply CORS policy after app is built
-app.UseCors("AllowAllOrigins");
-
-
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
-
+// Apply CORS policy after app is built
+app.UseRouting();
+app.UseCors("AllowAllOrigins");
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
