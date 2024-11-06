@@ -9,10 +9,9 @@ using System.Security.Claims;
 namespace BookQuoteAPI.Controllers
 {
     // launchSetting.json can be  found http://localhost:5134/swagger/index.html
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    [EnableCors("AllowAllOrigins")]
     public class BooksController : ControllerBase
     { 
         //inject DB
