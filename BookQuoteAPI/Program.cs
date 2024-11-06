@@ -7,12 +7,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL; // Add this for PostgreSQL
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Get the connection string from appsettings.json
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+
 // Use PostgreSQL for DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString)); // Updated to UseNpgsql for PostgreSQL
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? Environment.GetEnvironmentVariable("DATABASE_URL"))); // Updated to UseNpgsql for PostgreSQL
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseNpgsql(connectionString)); // Updated to UseNpgsql for PostgreSQL
 
