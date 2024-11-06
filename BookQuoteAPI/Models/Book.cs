@@ -1,4 +1,6 @@
-﻿namespace BookQuoteAPI.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace BookQuoteAPI.Models
 {
     public class Book
     {

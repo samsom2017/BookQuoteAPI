@@ -1,9 +1,12 @@
 ﻿using BookQuoteAPI.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookQuoteAPI.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -12,3 +15,5 @@ namespace BookQuoteAPI.Data
         public DbSet<Quote> Quotes { get; set; }
     }
 }
+
+
