@@ -25,10 +25,9 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
 // Add CORS policy here, before builder.Build()
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin", builder =>
+    options.AddPolicy("AllowAll", builder =>
     {
-        builder.WithOrigins("https://bookquoteapp.onrender.com") // Updated to include Render domain
-               .AllowAnyHeader()
+        builder.AllowAnyHeader()
                .AllowAnyMethod()
                .AllowCredentials();
     });
@@ -81,7 +80,7 @@ app.UseSwaggerUI();
 app.UseRouting();
 
 app.UseHttpsRedirection();
-app.UseCors("AllowSpecificOrigin");
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
