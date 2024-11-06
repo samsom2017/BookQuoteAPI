@@ -72,10 +72,7 @@ app.MapGet("/", () => Results.Redirect("/swagger"));
 // Apply CORS policy after app is built
 app.UseCors("AllowAllOrigins");
 
-/*
- builder.Services.AddControllers();
-var app = builder.Build();
- */
+
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
@@ -87,6 +84,7 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapIdentityApi<IdentityUser>();
