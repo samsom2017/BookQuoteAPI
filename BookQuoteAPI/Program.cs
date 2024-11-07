@@ -12,13 +12,29 @@ var builder = WebApplication.CreateBuilder(args);
 //string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
-// Use PostgreSQL for DbContext
+//// Use PostgreSQL for DbContext
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? Environment.GetEnvironmentVariable("DATABASE_URL"))); // Updated to UseNpgsql for PostgreSQL
+//builder.Services.AddDbContext<AuthDbContext>(options =>
+//    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? Environment.GetEnvironmentVariable("DATABASE_URL"))); // Updated to UseNpgsql for PostgreSQL
+
+// Retrieve the connection string from either appsettings.json or the environment variable
+
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                         ?? Environment.GetEnvironmentVariable("DATABASE_URL");
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Connection string is not configured. Please check appsettings.json or environment variables.");
+}
+
+// Use PostgreSQL for ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? Environment.GetEnvironmentVariable("DATABASE_URL"))); // Updated to UseNpgsql for PostgreSQL
+    options.UseNpgsql(connectionString));
+
+// Use PostgreSQL for AuthDbContext
 builder.Services.AddDbContext<AuthDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? Environment.GetEnvironmentVariable("DATABASE_URL"))); // Updated to UseNpgsql for PostgreSQL
-
-
+    options.UseNpgsql(connectionString));
 
 
 
