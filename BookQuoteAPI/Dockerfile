@@ -2,6 +2,24 @@
 
 # Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
 # For more information, please see https://aka.ms/containercompat
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+# Optional: Create a user if necessary
+RUN adduser -D containeruser
+USER containeruser
+
+WORKDIR /src
+COPY ["BookQuoteAPI/BookQuoteAPI.csproj", "BookQuoteAPI/"]
+RUN dotnet restore "BookQuoteAPI/BookQuoteAPI.csproj"
+COPY . . 
+WORKDIR "/src/BookQuoteAPI"
+RUN dotnet build "BookQuoteAPI.csproj" -c Release -o /app/build
+
+# Continue with the rest of the Dockerfile...
+
+
+
+
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-1809 AS base
