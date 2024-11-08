@@ -104,6 +104,7 @@ app.UseSwaggerUI();
 app.UseRouting();
 
 app.UseHttpsRedirection();
+
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
