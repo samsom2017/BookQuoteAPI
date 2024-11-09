@@ -13,7 +13,7 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:8.0-nanoserver-1809 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["BookQuoteAPI.csproj", "."]
+COPY ["path/to/BookQuoteAPI.csproj", "BookQuoteAPI/"]
 RUN dotnet restore "./BookQuoteAPI.csproj"
 COPY . .
 WORKDIR "/src/."
@@ -29,3 +29,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "BookQuoteAPI.dll"]
+
