@@ -8,17 +8,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL; // Add this for PostgreSQL
 var builder = WebApplication.CreateBuilder(args);
 
 
-// Get the connection string from appsettings.json
-//string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
-//// Use PostgreSQL for DbContext
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? Environment.GetEnvironmentVariable("DATABASE_URL"))); // Updated to UseNpgsql for PostgreSQL
-//builder.Services.AddDbContext<AuthDbContext>(options =>
-//    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? Environment.GetEnvironmentVariable("DATABASE_URL"))); // Updated to UseNpgsql for PostgreSQL
 
-// Retrieve the connection string from either appsettings.json or the environment variable
+
+//Retrieve the connection string from either appsettings.json or the environment variable
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                          ?? Environment.GetEnvironmentVariable("DATABASE_URL");
@@ -28,27 +22,27 @@ if (string.IsNullOrEmpty(connectionString))
     throw new InvalidOperationException("Connection string is not configured. Please check appsettings.json or environment variables.");
 }
 
-// Use PostgreSQL for ApplicationDbContext
+//Use PostgreSQL for ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-// Use PostgreSQL for AuthDbContext
+//Use PostgreSQL for AuthDbContext
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 
 
 
-// Add Identity services
+//Add Identity services
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<AuthDbContext>();
 
-// Add CORS policy here, before builder.Build()
+//Add CORS policy here, before builder.Build()
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
-    
+
         builder.WithOrigins("https://bookquoteapp.onrender.com")
                 .AllowAnyHeader()
                .AllowAnyMethod()
@@ -57,7 +51,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Add services to the container
+//Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -96,11 +90,11 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
-// Configure the HTTP request pipeline
+//Configure the HTTP request pipeline
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// Apply CORS policy after app is built
+//Apply CORS policy after app is built
 app.UseRouting();
 
 app.UseHttpsRedirection();
@@ -111,10 +105,18 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapIdentityApi<IdentityUser>();
 
-Set up dynamic port binding for Render
+//Set up dynamic port binding for Render
 var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
 app.Urls.Add($"http://*:{port}");
 
 app.Run();
+
+
+
+
+
+
+
+
 
 

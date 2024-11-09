@@ -7,6 +7,7 @@
 	  <InvariantGlobalization>false</InvariantGlobalization>
 	  <RootNamespace>BookQuoteAPI</RootNamespace>
 	  <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+	  <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
