@@ -32,7 +32,7 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 // Add Identity services
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<AuthDbContext>();
-
+/*
 // Add authentication with JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -47,6 +47,30 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+
+*/
+
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]))
+    };
+});
+
 
 // Add CORS policy here, before builder.Build()
 builder.Services.AddCors(options =>
