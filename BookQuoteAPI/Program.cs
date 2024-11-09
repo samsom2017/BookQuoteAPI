@@ -111,7 +111,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapIdentityApi<IdentityUser>();
 
-// Set up dynamic port binding for Render
+Set up dynamic port binding for Render
 var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
 app.Urls.Add($"http://*:{port}");
 
