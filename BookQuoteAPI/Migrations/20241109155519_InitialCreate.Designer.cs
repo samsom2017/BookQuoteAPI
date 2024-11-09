@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookQuoteAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241106140214_AddIdentitySupport")]
-    partial class AddIdentitySupport
+    [Migration("20241109155519_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
