@@ -25,6 +25,47 @@ namespace BookQuoteAPI.Controllers
             _context = context;
         }
 
+
+        // GET: api/Books
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var userGuid))
+            {
+                return BadRequest("Invalid or missing user identifier.");
+            }
+
+            var books = await _context.Books
+                .Where(x => x.UserId == userGuid)
+                .ToListAsync();
+
+            return Ok(books);
+        }
+
+        // GET: api/Books/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Book>> GetBook(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var userGuid))
+            {
+                return BadRequest("Invalid or missing user identifier.");
+            }
+
+            var book = await _context.Books
+                .Where(x => x.UserId == userGuid)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (book == null)
+            {
+                return NotFound("Book not found.");
+            }
+
+            return Ok(book);
+        }
+        /*
+
         // GET: api/Books
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
@@ -52,6 +93,8 @@ namespace BookQuoteAPI.Controllers
 
             return Ok(book);
         }
+        */
+
 
         // PUT: api/Books/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
