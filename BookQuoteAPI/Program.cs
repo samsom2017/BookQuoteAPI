@@ -17,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                          ?? Environment.GetEnvironmentVariable("DATABASE_URL");
 
+
 if (string.IsNullOrEmpty(connectionString))
 {
     throw new InvalidOperationException("Connection string is not configured. Please check appsettings.json or environment variables.");
@@ -42,6 +43,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
+
 
         builder.WithOrigins("https://bookquoteapp.onrender.com")
                 .AllowAnyHeader()
