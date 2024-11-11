@@ -10,7 +10,7 @@ using System.Security.Claims;
 namespace BookQuoteAPI.Controllers
 {
     // launchSetting.json can be  found http://localhost:5134/swagger/index.html
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BooksController : ControllerBase
@@ -33,7 +33,7 @@ namespace BookQuoteAPI.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var userGuid))
             {
-                return BadRequest("Invalid or missing user identifier.");
+                return Unauthorized("Invalid or missing user identifier.");
             }
 
             var books = await _context.Books
