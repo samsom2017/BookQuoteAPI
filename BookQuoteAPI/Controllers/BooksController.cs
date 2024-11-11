@@ -30,14 +30,10 @@ namespace BookQuoteAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var userGuid))
-            {
-                return Unauthorized("Invalid or missing user identifier.");
-            }
+            var userId = Guid.NewGuid();
 
             var books = await _context.Books
-                .Where(x => x.UserId == userGuid)
+                .Where(x => x.UserId == userId)
                 .ToListAsync();
 
             return Ok(books);
@@ -174,15 +170,11 @@ namespace BookQuoteAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Book>> PostBook(Book book)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var parsedUserId))
-            {
-                return Unauthorized("Invalid user ID");
-            }
+            var userId = Guid.NewGuid();
 
             var newBook = new Book
             {
-                UserId = parsedUserId,
+                UserId = userId,
                 Title = book.Title,
                 PublishedDate = book.PublishedDate,
                 Author = book.Author,
