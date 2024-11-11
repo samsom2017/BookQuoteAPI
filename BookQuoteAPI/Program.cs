@@ -21,6 +21,8 @@ if (string.IsNullOrEmpty(connectionString))
     throw new InvalidOperationException("Connection string is not configured. Please check appsettings.json or environment variables.");
 }
 
+
+
 // Use PostgreSQL for ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -49,6 +51,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 */
+
+
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 
@@ -124,6 +128,12 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate(); // Applies any pending migrations or
+                                  // creates the database if it doesn't exist
+}
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
 // Configure the HTTP request pipeline
@@ -146,7 +156,6 @@ var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
 app.Urls.Add($"http://*:{port}");
 
 app.Run();
-
 
 
 
