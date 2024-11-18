@@ -26,9 +26,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", builder =>
     {
-        builder.WithOrigins("https://bookquoteapp.onrender.com") // Angular frontend URL
+        builder.WithOrigins("https://bookquoteapp.onrender.com")
                .AllowAnyHeader()
-               .AllowAnyMethod();
+               .AllowAnyMethod()
+               .AllowCredentials()
+               .SetIsOriginAllowed(origin => true);
     });
 });
 
@@ -80,10 +82,24 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
+
+
+
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
+app.UseAuthentication();
+//add check
+app.UseStatusCodePages();
 app.UseAuthorization();
 app.MapControllers();
 app.MapIdentityApi<IdentityUser>();
+
+ //Set up dynamic port binding for Render
+var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
+app.Urls.Add($"http://*:{port}");
 
 app.Run();
 
