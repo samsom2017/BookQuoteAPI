@@ -145,6 +145,8 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 app.UseAuthentication();
+//add check
+app.UseStatusCodePages();
 app.UseAuthorization();
 app.MapControllers();
 app.MapIdentityApi<IdentityUser>();
