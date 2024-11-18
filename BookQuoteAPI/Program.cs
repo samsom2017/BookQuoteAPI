@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", builder =>
     {
-        builder.WithOrigins("http://localhost:4200", "http://localhost:60908") // Angular frontend URL
+        builder.WithOrigins("https://bookquoteapp.onrender.com") // Angular frontend URL
                .AllowAnyHeader()
                .AllowAnyMethod();
     });
