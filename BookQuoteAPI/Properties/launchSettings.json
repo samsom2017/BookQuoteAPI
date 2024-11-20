@@ -9,7 +9,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5134"
+      "applicationUrl": "https://bookquoteapp.onrender.com"
     },
     "https": {
       "commandName": "Project",
@@ -19,7 +19,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:5001;http://localhost:5000"
+      "applicationUrl": "https://bookquoteapp.onrender.com"
     },
     "IIS Express": {
       "commandName": "IISExpress",
@@ -45,7 +45,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:44173",
+      "applicationUrl": "https://bookquoteapp.onrender.com",
       "sslPort": 0
     }
   }
