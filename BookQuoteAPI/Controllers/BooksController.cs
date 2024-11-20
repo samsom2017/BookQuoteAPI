@@ -27,6 +27,7 @@ namespace BookQuoteAPI.Controllers
             _context = context;
         }
 
+
         // GET: api/Books
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
@@ -107,12 +108,38 @@ namespace BookQuoteAPI.Controllers
 
 
 
-        // POST: api/Books
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //// POST: api/Books
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult<List<Book>>> PostBook(Book book)
+        //{
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        //    var newBook = new Book
+        //    {
+        //        UserId = new Guid(userId),
+        //        Id = book.Id,
+        //        Title = book.Title,
+        //        PublishedDate = book.PublishedDate,
+        //        Author = book.Author,
+        //    };
+        //    _context.Books.Add(newBook);
+
+        //    await _context.SaveChangesAsync();
+
+        //    return Ok(await _context.Books.ToListAsync());
+        //}
+
+
         [HttpPost]
         public async Task<ActionResult<List<Book>>> PostBook(Book book)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized("User ID not found in token.");
+            }
+
             var newBook = new Book
             {
                 UserId = new Guid(userId),
@@ -127,6 +154,7 @@ namespace BookQuoteAPI.Controllers
 
             return Ok(await _context.Books.ToListAsync());
         }
+
 
         // DELETE: api/Books/5
         [HttpDelete("{id}")]
