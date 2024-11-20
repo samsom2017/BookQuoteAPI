@@ -6,6 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL; // Add this for PostgreSQL
 using Microsoft.IdentityModel.Tokens;  // Required for JWT authentication
 using System.Text;  // Add this line for Encoding
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,7 +88,10 @@ builder.Services.AddCors(options =>
 
     });
 });
-
+// Configure Data Protection
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(@"/app/keys"))
+    .SetApplicationName("BookQuoteAPI");
 
 // Add services to the container
 builder.Services.AddControllers();
