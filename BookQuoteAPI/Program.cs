@@ -21,6 +21,7 @@ if (string.IsNullOrEmpty(connectionString))
 }
 
 
+builder.Services.AddScoped<TokenService>();
 
 // Use PostgreSQL for ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
