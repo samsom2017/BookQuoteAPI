@@ -2,6 +2,7 @@
 using BookQuoteAPI.Data;
 using BookQuoteAPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -17,6 +18,7 @@ namespace BookQuoteAPI.Controllers
     {
         //inject DB
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
 
 
