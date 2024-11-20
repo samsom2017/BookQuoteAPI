@@ -10,7 +10,7 @@ using System.Security.Claims;
 namespace BookQuoteAPI.Controllers
 {
     // launchSetting.json can be  found http://localhost:5134/swagger/index.html
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     
@@ -18,7 +18,7 @@ namespace BookQuoteAPI.Controllers
     {
         //inject DB
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        //private readonly UserManager<IdentityUser> _userManager;
 
 
 
